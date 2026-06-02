@@ -25,6 +25,18 @@
 - 通用工程：测试、审计、迁移、排障、文档
 - 外部生态入口：MCP、编排框架、增强工具
 
+## mms-unix 调用关联
+
+| 场景 | 优先技能 | 触发语义 |
+|------|----------|----------|
+| 通用 HBuilderX 自动化、编译运行闭环 | `hbuilderx-automation` | HBuilderX CLI、Uni-App X、compile、run、debug、verify、Web/H5、Android、iOS、Harmony、device logs、screenshots |
+| 离线同步、接口契约、补传队列 | `mms-unix-sync-api-contract` | `syncQueue`、MMS Admin、同步接口、订单同步、会员操作、券码核销、基础资料同步、App 版本检测 |
+| HBuilderX 运行、Uni-App X 排障 | `mms-unix-hbuilderx-runbook` | H5/Web、Android App、HBuilderX CLI、UTS、UVue、UCSS、横屏、logcat、ClassCastException |
+| 组件 API、事件、v-model | `m-unix-component-api` | `m-*` 组件、`pages_demo`、`emits`、`v-model`、演示路由 |
+| 组件文档更新 | `mms-unix-doc` | 更新 mmsUnix 文档、VitePress、演示地址、pathMap |
+
+多技能场景先读取主技能，再读取关联技能。例如：离线同步接口联调失败且需要跑 Android 时，先读 `mms-unix-sync-api-contract`，再读 `mms-unix-hbuilderx-runbook`；需要实际驱动 HBuilderX CLI 编译、运行、看设备日志或截图时，再读 `hbuilderx-automation`。
+
 ## 维护规范
 - 新增或更新技能，仅修改 `skills-shared/`
 - 入口文件（`AGENTS.md` / `CLAUDE.md` / Cursor rules）只维护加载规则
