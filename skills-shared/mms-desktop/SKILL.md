@@ -17,7 +17,7 @@ description: >-
 ## 2. 相关技能
 
 - 仓库内 **`mms-desktop` 仅支持 Tauri**，不再维护 NW.js 壳。
-- UniApp H5 若需 **NW.js + nwjs-packager** 自建桌面包流程，见 **`.cursor/skills/mms-unix-desktop-nw-legacy/SKILL.md`**（与 **mms-desktop** 无代码复用）。
+- 普通 Vue / Vite / Vue CLI 产物统一按 `dist` 接入 Tauri；历史 NW.js 壳不再作为共享技能维护。
 
 ## 3. 目录（摘要）
 

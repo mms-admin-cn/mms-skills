@@ -24,20 +24,34 @@
 - `mms-*`：mms 脚手架专用
 - 通用工程：测试、审计、迁移、排障、文档
 - 外部生态入口：MCP、编排框架、增强工具
+- 系统/插件镜像：从 Codex 系统技能与本机插件缓存中可扫描到的技能同步而来，作为当前会话可见技能的项目快照；实际使用时仍依赖对应运行环境或插件工具支持
 
-## mms-unix 调用关联
+## 当前已同步的系统/插件镜像
+
+| 来源 | 技能目录 |
+|------|----------|
+| Codex 系统技能 | `imagegen`、`openai-docs`、`plugin-creator`、`skill-installer` |
+| Codex 本机技能 | `hatch-pet` |
+| Browser / Chrome | `control-in-app-browser`、`control-chrome` |
+| LaTeX | `latex-compile`、`latex-doctor`、`texlive-runtime-installer` |
+| Figma | `figma-use`、`figma-use-figjam`、`figma-use-slides`、`figma-code-connect`、`figma-create-new-file`、`figma-generate-design`、`figma-generate-diagram`、`figma-generate-library` |
+| Hyperframes | `hyperframes`、`hyperframes-cli`、`hyperframes-registry`、`gsap`、`website-to-hyperframes` |
+| Supabase | `supabase`、`supabase-postgres-best-practices` |
+| Superpowers 扩展 | `brainstorming`、`dispatching-parallel-agents`、`finishing-a-development-branch`、`subagent-driven-development`、`using-git-worktrees`、`verification-before-completion`、`writing-skills` |
+| 文档运行时 | `documents`、`presentations`、`spreadsheets` |
+
+## 常用技能索引
 
 | 场景 | 优先技能 | 触发语义 |
 |------|----------|----------|
-| 通用 HBuilderX 自动化、编译运行闭环 | `hbuilderx-automation` | HBuilderX CLI、Uni-App X、compile、run、debug、verify、Web/H5、Android、iOS、Harmony、device logs、screenshots |
-| 离线同步、接口契约、补传队列 | `mms-unix-sync-api-contract` | `syncQueue`、MMS Admin、同步接口、订单同步、会员操作、券码核销、基础资料同步、App 版本检测 |
-| HBuilderX 运行、Uni-App X 排障 | `mms-unix-hbuilderx-runbook` | H5/Web、Android App、HBuilderX CLI、UTS、UVue、UCSS、横屏、logcat、ClassCastException |
-| 组件 API、事件、v-model | `m-unix-component-api` | `m-*` 组件、`pages_demo`、`emits`、`v-model`、演示路由 |
-| 组件文档更新 | `mms-unix-doc` | 更新 mmsUnix 文档、VitePress、演示地址、pathMap |
+| Codex 插件市场安装与排障 | `codex-plugin-marketplace` | Codex 插件不能安装、插件页无安装入口、marketplace、openai-curated、codex plugin marketplace |
+| uni-app Vue3 全流程交付 | `uniapp-vue3-workflow` | uni-app Vue3、uv-ui、create-uni、HBuilderX 脚手架、环境变量、自动化测试、打包、H5/App/小程序发布、服务器部署 |
+| 普通 uni-app 编译运行闭环 | `hbuilderx-automation` | HBuilderX CLI、uni-app、compile、run、debug、verify、H5/Web、Android、iOS、小程序、device logs、screenshots |
 
-多技能场景先读取主技能，再读取关联技能。例如：离线同步接口联调失败且需要跑 Android 时，先读 `mms-unix-sync-api-contract`，再读 `mms-unix-hbuilderx-runbook`；需要实际驱动 HBuilderX CLI 编译、运行、看设备日志或截图时，再读 `hbuilderx-automation`。
+多技能场景先读取主技能，再读取关联技能。例如：用户只说一个 uni-app Vue3 需求时，先读 `uniapp-vue3-workflow` 串起分析、设计、开发、验证、测试、打包和部署；需要实际驱动 HBuilderX CLI 编译、运行、看设备日志或截图时，再读 `hbuilderx-automation`。
 
 ## 维护规范
 - 新增或更新技能，仅修改 `skills-shared/`
 - 入口文件（`AGENTS.md` / `CLAUDE.md` / Cursor rules）只维护加载规则
 - 不在多个入口重复维护技能细节
+- 同步外部技能时按 `name:` 判重，保留项目已有同名技能，只新增缺失目录

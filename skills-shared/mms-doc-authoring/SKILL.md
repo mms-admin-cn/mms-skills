@@ -34,7 +34,7 @@ description: >-
 
 ### 代码块（围栏）
 
-1. **语言**：必须标注 **`bash` / `java` / `ts` / `vue` / `json` / `yaml` / `sql` / `text`** 等合法标签；**mmsUnix** 正文用 **`uvue`**、**`uts`**、**`vue-html`**（已在 `config.mts` 的 **`markdown.languageAlias`** 映射到 Shiki）。
+1. **语言**：必须标注 **`bash` / `java` / `ts` / `vue` / `json` / `yaml` / `sql` / `text`** 等合法标签；与 `config.mts` 的 **`markdown.languageAlias`** 保持一致。
 2. **行高亮**：围栏第一行写 **` ```ts{4}`** 或 **`{4-6}`**、**`{1,7-9}`**；或在行尾用 **`// [!code highlight]`**（语言需支持 `//` 注释）。
 3. **行号**：本站默认 **`markdown.lineNumbers: false`**，需要时单块写 **` ```ts:line-numbers`**；可选 **` ```ts:line-numbers=2`**（起始行号）、**`:no-line-numbers`** 关闭。组合示例：**` ```typescript:line-numbers {1,14-15}`**（先 `:line-numbers` 再空格与花括号）。见 [行号](https://vitepress.dev/zh/guide/markdown#line-numbers)。
 4. **聚焦**：**`// [!code focus]`** 或 **`// [!code focus:<lines>]`**，弱化其余行。见 [聚焦](https://vitepress.dev/zh/guide/markdown#focus-in-code-blocks)。
@@ -60,7 +60,7 @@ description: >-
 4. **形态选择**：并列要点用列表；多属性对照用表格；步骤用有序列表；长分支用 **`::: details`** 折叠（标签见 config：`详细信息`）。
 5. **强调节制**：加粗仅标关键术语或结论；少用大段斜体。
 6. **链接**：用描述性锚文（例：[多租户配置](/mms-admin/tenant)），避免裸 URL；站内用 VitePress 路径风格。
-7. **代码**：语言标签、**`uvue` / `uts` / `vue-html`**、行号、高亮、聚焦、错误/警告、diff、**`code-group`**、**`@include`**、**`[[toc]]`** 等——**默认按上文「VitePress Markdown 必用能力」选用**；命令可复制、完整；过长脚本可放入 **`::: details`**。
+7. **代码**：语言标签、行号、高亮、聚焦、错误/警告、diff、**`code-group`**、**`@include`**、**`[[toc]]`** 等——**默认按上文「VitePress Markdown 必用能力」选用**；命令可复制、完整；过长脚本可放入 **`::: details`**。
 
 ## 本站已启用的 Markdown 容器
 
@@ -106,10 +106,6 @@ Badge 组件：`<Badge type="info" text="Java 21" />`，`type` 可取 `info` | `
 **广告位**（`<amp-ad>` 等）在 **`mms-ad`** 组件内维护，**不在**正文中手写广告标签。
 
 会员块须成对闭合；`type` 与 `components/mms-vip-content/index.vue` 中逻辑一致（勿使用未定义取值）。
-
-## mUnix 文档专区
-
-**`docs/mms-unix/`** 的章节顺序、演示地址表、pathMap 与文风：遵循 **[`mms-unix-doc`](../mms-unix-doc/SKILL.md)**（与本技能互补；本技能管通用可读性，mms-unix-doc 管组件文档契约）。
 
 ## 交付前自检
 

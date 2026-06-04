@@ -1,0 +1,21 @@
+{
+  "name": "mms-skills",
+  "version": "v1.11.0",
+  "description": "Shared skill library for MMS development workflows across Cursor, Codex, and Claude Code.",
+  "language": "zh-CN",
+  "skillsRoot": "skills-shared",
+  "defaultWorkflowSkill": "skills-shared/mms-dev-workflow/SKILL.md",
+  "entryFiles": {
+    "codex": "AGENTS.md",
+    "cursorRule": ".cursor/rules/00-project-bootstrap.mdc",
+    "cursorLegacy": ".cursorrules",
+    "claudeCode": "CLAUDE.md"
+  },
+  "versionDocs": "version",
+  "rules": [
+    "Use skills-shared as the single source of truth.",
+    "Analyze requirements before new feature work.",
+    "Create a version document before development.",
+    "Keep communication in Simplified Chinese unless code, commands, or logs require otherwise."
+  ]
+}

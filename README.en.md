@@ -1,36 +1,62 @@
 # mms-skills
 
-#### Description
-利用mms框架做项目开发中使用到的skills 集合。
+Current version: `v1.10.0`
 
-#### Software Architecture
-Software architecture description
+`mms-skills` is a shared skill library for MMS development workflows across Cursor, Codex, and Claude Code. The single source of truth is `skills-shared/`; entry files only tell each Agent where to load skills and which workflow rules to follow.
 
-#### Installation
+For the full Chinese guide, see [README.md](README.md).
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## Quick Facts
 
-#### Instructions
+| Item | Value |
+|------|-------|
+| Version file | `PROJECT_VERSION` |
+| Machine-readable manifest | `mms-skills.json` |
+| Skills root | `skills-shared/` |
+| Default workflow skill | `skills-shared/mms-dev-workflow/SKILL.md` |
+| Version docs | `version/` |
+| Skill count | `84` |
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## Install
 
-#### Contribution
+Set the repository location first:
 
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
+```bash
+export MMS_SKILLS_HOME="/absolute/path/to/mms-skills"
+```
 
+### Codex
 
-#### Gitee Feature
+```bash
+cp -f "$MMS_SKILLS_HOME/AGENTS.md" "AGENTS.md"
+```
 
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+### Cursor
+
+```bash
+mkdir -p .cursor/rules
+cp -f "$MMS_SKILLS_HOME/.cursor/rules/00-project-bootstrap.mdc" ".cursor/rules/00-project-bootstrap.mdc"
+cp -f "$MMS_SKILLS_HOME/.cursorrules" ".cursorrules"
+```
+
+### Claude Code
+
+```bash
+cp -f "$MMS_SKILLS_HOME/CLAUDE.md" "CLAUDE.md"
+```
+
+## Usage Rules
+
+1. Match the task to a skill under `skills-shared/<skill>/SKILL.md`.
+2. Read the main skill first, then related skills when needed.
+3. Analyze requirements before new feature work.
+4. Create `version/vX.Y.Z-feature.md` before implementation.
+5. Implement, verify, report progress, then capture reusable lessons back into `skills-shared/`.
+
+## Verify
+
+```bash
+test "$(cat PROJECT_VERSION)" = "v1.10.0"
+node -e 'const m=require("./mms-skills.json"); if (m.version !== "v1.10.0") process.exit(1); console.log(m.name, m.version)'
+find skills-shared -mindepth 2 -maxdepth 2 -name SKILL.md | wc -l
+```

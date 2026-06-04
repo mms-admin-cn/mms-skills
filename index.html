@@ -1,0 +1,1168 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>mms-skills | MMS AI 技能与插件官网</title>
+  <meta name="description" content="mms-skills 是面向 Cursor、Codex、Claude Code 的 MMS 共享技能库，统一沉淀插件开发、uni-app、HBuilderX、UI、测试、部署与多智能体协作能力。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080a10;
+      --bg-soft: #0f121c;
+      --panel: rgba(255, 255, 255, .072);
+      --panel-strong: rgba(255, 255, 255, .11);
+      --line: rgba(255, 255, 255, .15);
+      --text: #f7f9ff;
+      --muted: #aeb7ca;
+      --weak: #6f7b91;
+      --blue: #4e8cff;
+      --cyan: #3de0d0;
+      --orange: #ff8a3d;
+      --green: #6ee7a8;
+      --red: #ff647c;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .38);
+      --radius: 8px;
+      --nav-h: 72px;
+    }
+
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --bg-soft: #ffffff;
+      --panel: rgba(255, 255, 255, .74);
+      --panel-strong: rgba(255, 255, 255, .92);
+      --line: rgba(15, 23, 42, .12);
+      --text: #111827;
+      --muted: #526077;
+      --weak: #7c8799;
+      --shadow: 0 18px 52px rgba(37, 55, 92, .16);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Manrope", "Noto Sans SC", sans-serif;
+      font-size: 14px;
+      line-height: 1.58;
+      background:
+        linear-gradient(115deg, rgba(78, 140, 255, .12), transparent 33%),
+        radial-gradient(circle at 85% 20%, rgba(255, 138, 61, .1), transparent 25%),
+        var(--bg);
+      overflow-x: hidden;
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    .page-shell {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .grain {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      opacity: .11;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+    }
+
+    .site-nav {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 40;
+      width: min(1120px, calc(100% - 28px));
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: color-mix(in srgb, var(--bg-soft) 72%, transparent);
+      backdrop-filter: blur(22px);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 180px;
+    }
+
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      display: block;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+
+
+    .brand strong {
+      display: block;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 4px;
+      color: var(--weak);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .nav-links a,
+    .theme-toggle,
+    .copy-btn,
+    .filter-btn {
+      border: 1px solid transparent;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .nav-links a {
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .nav-links a:hover,
+    .theme-toggle:hover {
+      color: var(--text);
+      border-color: var(--line);
+      background: var(--panel);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      min-width: 180px;
+    }
+
+    .theme-toggle {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+    }
+
+    .github-link,
+    .primary-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .github-link {
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+    }
+
+    .primary-link {
+      padding: 11px 15px;
+      color: #07111f;
+      background: linear-gradient(135deg, #6ee7ff, #8ef0b0 55%, #ffb25f);
+      box-shadow: 0 16px 42px rgba(78, 140, 255, .22);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      padding: 124px 0 70px;
+      overflow: hidden;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: .72;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 28%;
+      background: linear-gradient(to top, var(--bg), transparent);
+      pointer-events: none;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+      gap: 42px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      backdrop-filter: blur(12px);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 6px rgba(110, 231, 168, .12);
+    }
+
+    h1 {
+      margin: 22px 0 20px;
+      max-width: 720px;
+      font-size: clamp(40px, 5.8vw, 75px);
+      line-height: 1.16;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .hero-title-accent {
+      color: transparent;
+      background: linear-gradient(135deg, #ffffff 5%, #6ee7ff 40%, #ffb25f 86%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    [data-theme="light"] .hero-title-accent {
+      background: linear-gradient(135deg, #111827 10%, #2563eb 52%, #f97316 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-lead {
+      max-width: 660px;
+      margin: 0 0 26px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.85;
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .secondary-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 15px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+      backdrop-filter: blur(14px);
+    }
+
+    .tool-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .tool-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 8px 11px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--panel) 80%, transparent);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-console {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: color-mix(in srgb, var(--bg-soft) 72%, transparent);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    .console-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .window-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--weak);
+    }
+
+    .window-dots span:nth-child(1) { background: var(--red); }
+    .window-dots span:nth-child(2) { background: var(--orange); }
+    .window-dots span:nth-child(3) { background: var(--green); }
+
+    .console-body {
+      padding: 22px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .metric {
+      min-height: 86px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+    }
+
+    .metric b {
+      display: block;
+      font-size: 24px;
+      line-height: 1;
+      font-family: "JetBrains Mono", monospace;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .pipeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pipeline-row {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--panel) 78%, transparent);
+    }
+
+    .pipeline-row i {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: #07111f;
+      background: var(--cyan);
+    }
+
+    .pipeline-row strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .pipeline-row small {
+      display: block;
+      margin-top: 4px;
+      color: var(--weak);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .status-chip {
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(110, 231, 168, .12);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    section {
+      position: relative;
+      padding: 72px 0;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 22px;
+      margin-bottom: 24px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 38px);
+      line-height: 1.24;
+      letter-spacing: 0;
+    }
+
+    .section-heading p {
+      margin: 0;
+      max-width: 540px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.78;
+      font-weight: 500;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .feature-card,
+    .skill-card,
+    .install-card,
+    .flow-step,
+    .showcase-panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 18px 44px rgba(0,0,0,.12);
+      backdrop-filter: blur(16px);
+    }
+
+    .feature-card {
+      min-height: 220px;
+      padding: 20px;
+      overflow: hidden;
+      transition: .22s ease;
+    }
+
+    .feature-card:hover,
+    .skill-card:hover,
+    .install-card:hover {
+      transform: translateY(-4px);
+      border-color: color-mix(in srgb, var(--blue) 52%, var(--line));
+      background: var(--panel-strong);
+    }
+
+    .icon-box {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: #07111f;
+      background: var(--blue);
+      margin-bottom: 18px;
+    }
+
+    .feature-card:nth-child(2) .icon-box { background: var(--orange); }
+    .feature-card:nth-child(3) .icon-box { background: var(--green); }
+
+    .feature-card h3,
+    .skill-card h3,
+    .install-card h3,
+    .flow-step h3 {
+      margin: 0 0 9px;
+      font-size: 16px;
+      line-height: 1.38;
+      letter-spacing: 0;
+    }
+
+    .feature-card p,
+    .skill-card p,
+    .flow-step p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.76;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .showcase {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .showcase-panel {
+      padding: 22px;
+      overflow: hidden;
+    }
+
+    .ring-map {
+      position: relative;
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+    }
+
+    .ring {
+      position: absolute;
+      border: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+      border-radius: 50%;
+      animation: spin 24s linear infinite;
+    }
+
+    .ring:nth-child(1) { width: 330px; height: 330px; }
+    .ring:nth-child(2) { width: 238px; height: 238px; animation-duration: 18s; animation-direction: reverse; }
+    .ring:nth-child(3) { width: 146px; height: 146px; animation-duration: 14s; }
+
+    .core-node {
+      position: relative;
+      z-index: 2;
+      width: 132px;
+      height: 132px;
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: #07111f;
+      background: linear-gradient(135deg, #6ee7ff, #8ef0b0 58%, #ffb25f);
+      box-shadow: 0 22px 60px rgba(78, 140, 255, .28);
+      font-weight: 900;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .orbit-chip {
+      position: absolute;
+      z-index: 3;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--bg-soft) 70%, transparent);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.16);
+    }
+
+    .orbit-chip:nth-of-type(1) { top: 40px; left: 54px; }
+    .orbit-chip:nth-of-type(2) { top: 86px; right: 18px; }
+    .orbit-chip:nth-of-type(3) { bottom: 76px; right: 46px; }
+    .orbit-chip:nth-of-type(4) { bottom: 46px; left: 38px; }
+    .orbit-chip:nth-of-type(5) { top: 198px; left: 0; }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .skill-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .filter-btn {
+      min-height: 40px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      border-color: var(--line);
+      background: var(--panel);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .filter-btn.active {
+      color: #07111f;
+      border-color: transparent;
+      background: linear-gradient(135deg, #6ee7ff, #8ef0b0 58%, #ffb25f);
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .skill-card {
+      display: flex;
+      min-height: 190px;
+      flex-direction: column;
+      padding: 20px;
+      transition: .22s ease;
+    }
+
+    .skill-card .tag {
+      width: fit-content;
+      margin-bottom: 18px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(78, 140, 255, .12);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .skill-card[data-type="ecosystem"] .tag {
+      background: rgba(255, 138, 61, .13);
+      color: var(--orange);
+    }
+
+    .skill-card footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 18px;
+      color: var(--weak);
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .install-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .install-card {
+      padding: 20px;
+    }
+
+    .install-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.72;
+    }
+
+    .code-block {
+      position: relative;
+      margin-top: 16px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      background: #070a12;
+      color: #e8f0ff;
+      overflow: hidden;
+    }
+
+    .code-block pre {
+      margin: 0;
+      padding: 18px 16px 54px;
+      overflow-x: auto;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .copy-btn {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      min-height: 34px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border-color: rgba(255,255,255,.16);
+      background: rgba(255,255,255,.1);
+      color: #fff;
+      font-weight: 850;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .flow-step {
+      min-height: 176px;
+      padding: 20px;
+    }
+
+    .flow-step .num {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      border-radius: 12px;
+      background: var(--panel-strong);
+      color: var(--cyan);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 900;
+    }
+
+    .cta-band {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--panel) 72%, transparent);
+      backdrop-filter: blur(18px);
+    }
+
+    .cta-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: center;
+    }
+
+    .cta-inner h2 {
+      margin: 0 0 12px;
+      font-size: clamp(26px, 3.4vw, 42px);
+      line-height: 1.22;
+    }
+
+    .cta-inner p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.78;
+      max-width: 640px;
+    }
+
+    .site-footer {
+      padding: 34px 0;
+      color: var(--weak);
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 980px) {
+      :root { --nav-h: 64px; }
+      .site-nav { top: 10px; width: calc(100% - 20px); border-radius: 14px; }
+      .brand span, .nav-links { display: none; }
+      .nav-actions { min-width: auto; }
+      .github-link { display: none; }
+      .hero { min-height: auto; padding: 108px 0 54px; }
+      h1 { font-size: clamp(36px, 7vw, 56px); line-height: 1.18; }
+      .hero-grid, .showcase, .cta-inner { grid-template-columns: 1fr; }
+      .hero-console { max-width: 640px; }
+      .feature-grid, .skill-grid, .install-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .section-heading { align-items: start; flex-direction: column; }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 24px, 1120px); }
+      .brand { min-width: auto; }
+      .brand strong { font-size: 15px; }
+      .primary-link { padding: 10px 12px; font-size: 13px; }
+      h1 { margin: 18px 0 16px; font-size: clamp(31px, 9vw, 40px); line-height: 1.24; }
+      .hero-actions { align-items: stretch; }
+      .hero-actions a { justify-content: center; width: 100%; }
+      .hero-lead { font-size: 14px; line-height: 1.82; }
+      .tool-strip { gap: 8px; }
+      .tool-pill { font-size: 12px; }
+      .metric-grid, .feature-grid, .skill-grid, .install-grid, .flow { grid-template-columns: 1fr; }
+      .pipeline-row { grid-template-columns: 34px minmax(0, 1fr); }
+      .pipeline-row .status-chip { grid-column: 2; width: fit-content; }
+      .ring-map { min-height: 330px; }
+      .ring:nth-child(1) { width: 260px; height: 260px; }
+      .ring:nth-child(2) { width: 190px; height: 190px; }
+      .ring:nth-child(3) { width: 120px; height: 120px; }
+      .orbit-chip { font-size: 11px; padding: 7px 9px; }
+      .orbit-chip:nth-of-type(1) { top: 18px; left: 22px; }
+      .orbit-chip:nth-of-type(2) { top: 68px; right: 0; }
+      .orbit-chip:nth-of-type(3) { bottom: 52px; right: 12px; }
+      .orbit-chip:nth-of-type(4) { bottom: 22px; left: 10px; }
+      .orbit-chip:nth-of-type(5) { top: 170px; left: 0; }
+      .section-heading h2 { font-size: 22px; line-height: 1.32; }
+      section { padding: 52px 0; }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="page-shell">
+    <div class="grain" aria-hidden="true"></div>
+    <nav class="site-nav" aria-label="主导航">
+      <a class="brand" href="#top" aria-label="MMS AI 技能库 首页">
+        <img class="brand-mark" src="logo.png" alt="MMS" />
+        <span><strong>MMS AI 技能库</strong></span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">特性</a>
+        <a href="#skills">技能</a>
+        <a href="#install">安装</a>
+        <a href="#workflow">流程</a>
+      </div>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" aria-label="切换主题"><i data-lucide="sun-moon"></i></button>
+        <a class="github-link" href="README.md"><i data-lucide="book-open"></i>README</a>
+      </div>
+    </nav>
+
+    <header id="top" class="hero">
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow"><span class="pulse-dot"></span>v1.11.0 · Cursor / Codex / Claude Code 共享技能源</div>
+          <h1><span class="hero-title-accent">MMS AI 技能库</span></h1>
+          <p class="hero-lead">面向 MMS 研发体系的插件与技能官网首页。统一沉淀 uni-app、HBuilderX、JAR 插件、UI 设计、API 测试、部署、多智能体协作与内容治理能力，让每个 Agent 都从同一套 `skills-shared/` 出发。</p>
+          <div class="hero-actions">
+            <a class="primary-link" href="#install"><i data-lucide="terminal-square"></i>立即接入</a>
+            <a class="secondary-link" href="#skills"><i data-lucide="sparkles"></i>浏览 20 款特色技能</a>
+          </div>
+          <div class="tool-strip" aria-label="支持工具">
+            <span class="tool-pill"><i data-lucide="bot"></i>Codex</span>
+            <span class="tool-pill"><i data-lucide="mouse-pointer-click"></i>Cursor</span>
+            <span class="tool-pill"><i data-lucide="code-2"></i>Claude Code</span>
+            <span class="tool-pill"><i data-lucide="package-check"></i>84 Skills</span>
+            <span class="tool-pill"><i data-lucide="git-branch"></i>SSOT</span>
+          </div>
+        </div>
+
+        <aside class="hero-console" aria-label="项目状态面板">
+          <div class="console-top">
+            <div class="window-dots"><span></span><span></span><span></span></div>
+            <span class="status-chip">READY</span>
+          </div>
+          <div class="console-body">
+            <div class="metric-grid">
+              <div class="metric"><b>84</b><span>技能快照</span></div>
+              <div class="metric"><b>20</b><span>特色入口</span></div>
+              <div class="metric"><b>3</b><span>Agent 端</span></div>
+            </div>
+            <div class="pipeline">
+              <div class="pipeline-row"><i data-lucide="route"></i><div><strong>mms-dev-workflow</strong><small>分析 -> version 文档 -> 开发 -> 验证 -> 复盘</small></div><span class="status-chip">MAIN</span></div>
+              <div class="pipeline-row"><i data-lucide="plug-zap"></i><div><strong>MMS 插件族</strong><small>插件开发、验收、菜单、联邦前端、安装 SQL</small></div><span class="status-chip">CORE</span></div>
+              <div class="pipeline-row"><i data-lucide="monitor-smartphone"></i><div><strong>uni-app 全链路</strong><small>Vue3、uv-ui、HBuilderX、H5/App/小程序</small></div><span class="status-chip">SHIP</span></div>
+              <div class="pipeline-row"><i data-lucide="shield-check"></i><div><strong>生态增强</strong><small>Superpowers、Playwright、UI/UX、内容风险与技能创建</small></div><span class="status-chip">BOOST</span></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section id="features">
+        <div class="container">
+          <div class="section-heading">
+            <h2>三端合一，同一套工程纪律</h2>
+            <p>官网首页按技能库的真实结构展示：入口文件只负责加载规则，`skills-shared/` 才是唯一技能来源，开发前先建版本文档。</p>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card"><div class="icon-box"><i data-lucide="layers-3"></i></div><h3>共享技能 SSOT</h3><p>所有技能统一维护在 `skills-shared/`，避免 Cursor、Codex、Claude Code 各写一份规则，减少版本漂移。</p></article>
+            <article class="feature-card"><div class="icon-box"><i data-lucide="workflow"></i></div><h3>研发流程内置</h3><p>每个新功能先分析，再创建 `version/vX.Y.Z-功能说明.md`，开发、验证、复盘都留痕。</p></article>
+            <article class="feature-card"><div class="icon-box"><i data-lucide="scan-search"></i></div><h3>技能按场景触发</h3><p>MMS 核心技能走主链路，生态增强技能按需补强，避免一次性加载全部能力造成上下文膨胀。</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="showcase">
+        <div class="container showcase">
+          <div class="showcase-panel ring-map" aria-label="技能协作拓扑">
+            <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+            <div class="orbit-chip">uni-app Vue3</div>
+            <div class="orbit-chip">MMS Plugin</div>
+            <div class="orbit-chip">Playwright</div>
+            <div class="orbit-chip">UI/UX</div>
+            <div class="orbit-chip">SSH / DB</div>
+            <div class="core-node">skills<br>shared</div>
+          </div>
+          <div class="showcase-panel">
+            <div class="section-heading" style="margin-bottom:18px">
+              <h2>插件、技能、文档和部署不再散落</h2>
+            </div>
+            <div class="pipeline">
+              <div class="pipeline-row"><i data-lucide="file-badge"></i><div><strong>版本文档</strong><small>所有新增能力都有 `version/vX.Y.Z-xxx.md`，方便恢复上下文。</small></div><span class="status-chip">DOC</span></div>
+              <div class="pipeline-row"><i data-lucide="boxes"></i><div><strong>插件规范</strong><small>JAR 插件、联邦前端、安装 SQL、菜单权限、远端资源一次查清。</small></div><span class="status-chip">PLUGIN</span></div>
+              <div class="pipeline-row"><i data-lucide="palette"></i><div><strong>体验优化</strong><small>frontend-design + ui-ux-pro-max 负责从能用到好用、好看、可验证。</small></div><span class="status-chip">UX</span></div>
+              <div class="pipeline-row"><i data-lucide="repeat-2"></i><div><strong>回归闭环</strong><small>API 测试、浏览器 E2E、日志分析和安全审计组合成可复用验收链路。</small></div><span class="status-chip">QA</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills">
+        <div class="container">
+          <div class="section-heading">
+            <h2>20 款特色技能展示</h2>
+            <p>核心技能负责 MMS 日常开发主链路，生态增强技能负责协作、质量、UI、测试、资料检索和内容治理。</p>
+          </div>
+          <div class="skill-toolbar" role="tablist" aria-label="技能筛选">
+            <button class="filter-btn active" data-filter="all" type="button">全部</button>
+            <button class="filter-btn" data-filter="core" type="button">MMS 核心</button>
+            <button class="filter-btn" data-filter="ecosystem" type="button">生态增强</button>
+          </div>
+          <div class="skill-grid" id="skillGrid"></div>
+        </div>
+      </section>
+
+      <section id="install">
+        <div class="container">
+          <div class="section-heading">
+            <h2>三端接入，只复制入口文件</h2>
+            <p>目标项目不用复制全部技能正文，只接入对应入口文件，入口会引导 Agent 回到共享技能库读取 `SKILL.md`。</p>
+          </div>
+          <div class="install-grid">
+            <article class="install-card"><h3>Codex</h3><p>在目标项目根目录复制 `AGENTS.md`。</p><div class="code-block"><pre>export MMS_SKILLS_HOME="/Volumes/SXPCWLKJ/MyWork/mms-skills"
+cp -f "$MMS_SKILLS_HOME/AGENTS.md" "AGENTS.md"</pre><button class="copy-btn" type="button">复制</button></div></article>
+            <article class="install-card"><h3>Cursor</h3><p>复制 Cursor rules 与兼容入口。</p><div class="code-block"><pre>mkdir -p .cursor/rules
+cp -f "$MMS_SKILLS_HOME/.cursor/rules/00-project-bootstrap.mdc" ".cursor/rules/00-project-bootstrap.mdc"
+cp -f "$MMS_SKILLS_HOME/.cursorrules" ".cursorrules"</pre><button class="copy-btn" type="button">复制</button></div></article>
+            <article class="install-card"><h3>Claude Code</h3><p>复制 `CLAUDE.md` 即可进入统一工作流。</p><div class="code-block"><pre>export MMS_SKILLS_HOME="/Volumes/SXPCWLKJ/MyWork/mms-skills"
+cp -f "$MMS_SKILLS_HOME/CLAUDE.md" "CLAUDE.md"</pre><button class="copy-btn" type="button">复制</button></div></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="workflow">
+        <div class="container">
+          <div class="section-heading">
+            <h2>从一句需求到可复盘交付</h2>
+            <p>每次工作都留下可追溯的版本文档，长会话也能靠文档恢复，不依赖对话历史硬撑。</p>
+          </div>
+          <div class="flow">
+            <article class="flow-step"><div class="num">01</div><h3>匹配技能</h3><p>先定位主技能，再读取关联技能。复杂任务先走 `mms-dev-workflow`。</p></article>
+            <article class="flow-step"><div class="num">02</div><h3>创建版本文档</h3><p>新功能先写 `version/vX.Y.Z-功能说明.md`，边界、风险、验收都写清楚。</p></article>
+            <article class="flow-step"><div class="num">03</div><h3>开发与验证</h3><p>按场景调用插件、UI、API、HBuilderX、Playwright 等技能，形成交付闭环。</p></article>
+            <article class="flow-step"><div class="num">04</div><h3>复盘沉淀</h3><p>把可复用模式写回技能库，让下一次 Agent 更快进入状态。</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <div class="container cta-inner">
+          <div>
+            <h2>把技能库变成团队的第二大脑</h2>
+            <p>从插件开发到页面美化，从服务部署到浏览器回归，所有经验都沉淀成能被 Agent 反复调用的技能。</p>
+          </div>
+          <a class="primary-link" href="#install"><i data-lucide="rocket"></i>开始安装</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-row">
+        <span>mms-skills · v1.11.0 · 84 skills</span>
+        <span>SSOT: skills-shared/ · Workflow: mms-dev-workflow</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>
+    const skills = [
+      ["mms-dev-workflow", "统一研发流程", "分析、版本文档、开发、进度同步、复盘沉淀", "core", "workflow"],
+      ["uniapp-vue3-workflow", "uni-app 全链路", "Vue3、uv-ui、HBuilderX、H5/App/小程序", "core", "mobile"],
+      ["hbuilderx-automation", "HBuilderX CLI", "导入、运行、打包、日志、截图", "core", "terminal"],
+      ["mms-plugin", "MMS 插件开发", "JAR 插件、联邦前端、安装 SQL", "core", "plug-zap"],
+      ["mms-plugin-check", "插件验收排障", "菜单、权限、remoteEntry、schema SQL", "core", "badge-check"],
+      ["mms-db-connect", "数据库连接", "数据源、ENC、MySQL 只读排查", "core", "database"],
+      ["mms-ssh-connect", "服务器连接", "SSH、rsync、Docker 部署排障", "core", "server"],
+      ["mms-doc-authoring", "文档撰写", "VitePress、容器、Badge、代码组", "core", "book-open"],
+      ["mms-desktop", "桌面打包", "Vue dist 接入 Tauri 桌面壳", "core", "monitor"],
+      ["api-tester", "API 测试", "OpenAPI、curl、集成测试、smoke", "core", "webhook"],
+      ["oh-my-claudecode", "多角色编排", "架构、实现、评审、测试并行协作", "ecosystem", "users"],
+      ["superpowers", "工程纪律", "技能优先、TDD、调试、评审", "ecosystem", "shield-check"],
+      ["everything-claude-code", "全流程工具箱", "需求、实现、测试、安全、文档", "ecosystem", "package-plus"],
+      ["frontend-design", "前端设计", "页面生成、响应式、视觉 QA", "ecosystem", "paintbrush"],
+      ["ui-ux-pro-max", "UI/UX 精修", "风格、配色、组件、体验策略", "ecosystem", "sparkles"],
+      ["playwright-mcp", "浏览器回归", "E2E、截图、真实用户路径", "ecosystem", "mouse-pointer-click"],
+      ["agent-reach", "联网资料", "最新文档、规范、示例归纳", "ecosystem", "search"],
+      ["humanizer-zh", "中文润色", "去 AI 腔、保留事实、自然表达", "ecosystem", "pen-line"],
+      ["content-risk-detector", "内容风险", "敏感词、违规表达、发布风险", "ecosystem", "scan-warning"],
+      ["skill-creator", "技能创建", "把稳定流程沉淀成 SKILL.md", "ecosystem", "wand-sparkles"]
+    ];
+
+    const skillGrid = document.getElementById("skillGrid");
+    function renderSkills(filter = "all") {
+      skillGrid.innerHTML = skills
+        .filter(skill => filter === "all" || skill[3] === filter)
+        .map(([name, title, desc, type, icon]) => `
+          <article class="skill-card" data-type="${type}">
+            <span class="tag">${type === "core" ? "MMS 核心" : "生态增强"}</span>
+            <h3>${title}</h3>
+            <p>${desc}</p>
+            <footer><span>${name}</span><i data-lucide="${icon}"></i></footer>
+          </article>`).join("");
+      if (window.lucide) window.lucide.createIcons();
+    }
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(item => item.classList.remove("active"));
+        btn.classList.add("active");
+        renderSkills(btn.dataset.filter);
+      });
+    });
+
+    const themeButton = document.querySelector(".theme-toggle");
+    themeButton.addEventListener("click", () => {
+      document.body.dataset.theme = document.body.dataset.theme === "dark" ? "light" : "dark";
+    });
+
+    document.querySelectorAll(".copy-btn").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const text = btn.parentElement.querySelector("pre").textContent;
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = "已复制";
+          setTimeout(() => btn.textContent = "复制", 1300);
+        } catch {
+          btn.textContent = "手动复制";
+        }
+      });
+    });
+
+    function setupCanvas() {
+      const canvas = document.getElementById("hero-canvas");
+      const ctx = canvas.getContext("2d");
+      let width = 0, height = 0, points = [];
+      const names = ["MMS", "uni-app", "Plugin", "UI", "API", "SSH", "DB", "Docs", "QA", "Agent"];
+
+      function resize() {
+        width = canvas.width = Math.floor(canvas.offsetWidth * devicePixelRatio);
+        height = canvas.height = Math.floor(canvas.offsetHeight * devicePixelRatio);
+        ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+        const cssW = canvas.offsetWidth;
+        const cssH = canvas.offsetHeight;
+        points = Array.from({ length: 34 }, (_, i) => ({
+          x: Math.random() * cssW,
+          y: Math.random() * cssH,
+          vx: (Math.random() - .5) * .28,
+          vy: (Math.random() - .5) * .28,
+          r: 2 + Math.random() * 2.8,
+          label: names[i % names.length]
+        }));
+      }
+
+      function draw() {
+        const cssW = canvas.offsetWidth;
+        const cssH = canvas.offsetHeight;
+        ctx.clearRect(0, 0, cssW, cssH);
+        ctx.save();
+        ctx.globalAlpha = .32;
+        ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue("--line");
+        for (let x = 0; x < cssW; x += 72) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, cssH); ctx.stroke();
+        }
+        for (let y = 0; y < cssH; y += 72) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(cssW, y); ctx.stroke();
+        }
+        ctx.restore();
+
+        points.forEach((p, idx) => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < -20 || p.x > cssW + 20) p.vx *= -1;
+          if (p.y < -20 || p.y > cssH + 20) p.vy *= -1;
+          for (let j = idx + 1; j < points.length; j++) {
+            const q = points[j];
+            const d = Math.hypot(p.x - q.x, p.y - q.y);
+            if (d < 170) {
+              ctx.globalAlpha = (170 - d) / 520;
+              ctx.strokeStyle = idx % 3 === 0 ? "#4e8cff" : idx % 3 === 1 ? "#ff8a3d" : "#3de0d0";
+              ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+            }
+          }
+          ctx.globalAlpha = .8;
+          ctx.fillStyle = idx % 3 === 0 ? "#4e8cff" : idx % 3 === 1 ? "#ff8a3d" : "#3de0d0";
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+          if (idx % 6 === 0) {
+            ctx.globalAlpha = .38;
+            ctx.font = "700 12px Manrope, sans-serif";
+            ctx.fillText(p.label, p.x + 10, p.y - 8);
+          }
+        });
+        requestAnimationFrame(draw);
+      }
+
+      resize();
+      window.addEventListener("resize", resize);
+      draw();
+    }
+
+    renderSkills();
+    setupCanvas();
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "skill_name": "uniapp-vue3-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "给我做一个 uni-app Vue3 的会员充值页面，使用 uv-ui，有充值套餐、支付方式、协议勾选，最后能跑 H5 验证。",
+      "expected_output": "应先分析需求并创建版本文档，使用 uv-ui 组件和工具，完成页面与状态逻辑，配置环境变量，运行测试和 HBuilderX H5 验证。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "新建一个 uniapp-vue3 项目，接入 uv-ui 和环境变量，做一个订单列表，后面要打包成 H5 部署到服务器。",
+      "expected_output": "应使用 create-uni 创建脚手架，导入 HBuilderX，接入 uv-ui，生成 .env.example，完成订单列表，执行测试、publish web，并按 mms-ssh-connect 部署规则处理服务器部署。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "把现有 uni-app Vue3 项目的登录接口联调好，做好自动化测试，然后打一个 Android 包。",
+      "expected_output": "应接管现有项目，调用 env-manager 管理 API 配置，调用 api-tester 生成接口测试，使用 uv-ui 表单/校验工具，最后用 HBuilderX launch/pack/publish 验证 Android 目标。",
+      "files": []
+    }
+  ]
+}
+

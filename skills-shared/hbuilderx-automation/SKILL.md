@@ -1,171 +1,128 @@
 ---
 name: hbuilderx-automation
-description: Automate HBuilderX CLI workflows for Uni-App X projects. Use whenever a user asks to compile, run, debug, or verify Uni-App X/HBuilderX Web, H5, Android, iOS, Harmony, device logs, screenshots, or says to keep fixing until HBuilderX passes. Drives the local HBuilderX CLI, interprets compile logs, and turns recurring compiler failures into tests or coding rules.
+description: HBuilderX CLI 自动化技能；用于普通 uni-app 项目的 H5/Web、App Android/iOS、小程序编译运行、设备列表、日志、截图与失败排查。用户提到 HBuilderX、uni-app、运行到浏览器、运行到手机、打包、真机日志、H5 端口、manifest/pages 配置时使用。
 ---
 
-# HBuilderX Automation
+# HBuilderX 自动化（普通 uni-app）
 
-Use this skill to control HBuilderX from the terminal for Uni-App X projects, especially when the user wants Web/H5 and App builds verified rather than only Node tests.
+## 使用边界
 
-## CLI Discovery
+使用本技能处理普通 uni-app 项目：H5/Web、本地浏览器预览、App Android/iOS、微信/支付宝等小程序目标，以及 HBuilderX CLI 驱动的编译、运行、日志和截图。
 
-Prefer the macOS bundled CLI when present:
+本技能只保留普通 uni-app 工作流。遇到不属于普通 uni-app 的历史项目类型时，不沿用旧项目规则，先与用户确认当前目标栈。
+
+## CLI 定位
+
+macOS 默认优先使用：
 
 ```bash
 /Applications/HBuilderX.app/Contents/MacOS/cli
 ```
 
-If that path is missing, locate HBuilderX before giving up:
+如果不存在，先定位 HBuilderX：
 
 ```bash
 mdfind 'kMDItemFSName == "HBuilderX.app"'
 ```
 
-Confirm available commands with:
+确认 CLI 能力：
 
 ```bash
 /Applications/HBuilderX.app/Contents/MacOS/cli help
 ```
 
-## Compile Commands
+## 常用命令
 
-Use absolute project paths. For `mms-unix`, the source-of-truth Android compile command is:
-
-```bash
-/Applications/HBuilderX.app/Contents/MacOS/cli launch app-android --project /Users/shanpengnian/MyWork/mms-cashier/mms-unix --compile true --continue-on-error false --cleanCache false
-```
-
-For Web/H5 compile verification:
-
-```bash
-/Applications/HBuilderX.app/Contents/MacOS/cli launch web --project /absolute/path/to/project --compile true --continue-on-error false --browser Built
-```
-
-For `mms-unix`, keep the project runbook close at hand:
-
-```text
-/Users/shanpengnian/MyWork/mms-cashier/mms-unix/docs/uni-app-x-hbuilderx-runbook.md
-```
-
-Use `--compile true` when the goal is compiler verification without requiring a connected device. Use `--continue-on-error false` so the first real compiler error is precise and actionable. Keep `--cleanCache false` during tight debug loops; switch to `--cleanCache true` once after confusing cache behavior or before final verification.
-
-## Workflow
-
-1. Run the project’s fast local tests first if they exist.
-2. Run HBuilderX Web/H5 compile if the project targets H5.
-3. Run HBuilderX App compile for the requested platform, usually `app-android`.
-4. If the compile fails, read the first `[plugin:uni:app-uts] 编译失败` block and fix that exact root cause.
-5. Add or update a focused regression test or static compatibility guard for every compiler pattern fixed.
-6. Re-run the focused tests and the HBuilderX compile command that failed.
-7. Repeat until HBuilderX prints a successful compile marker and no red compiler error remains.
-
-For `mms-unix`, also verify the project-specific runbook and doc guard when changing HBuilderX/Uni-App X behavior:
-
-```bash
-npm test -- tests/mms-unix-component-upgrade-doc.test.js
-```
-
-## Result Interpretation
-
-Treat these as success markers:
-
-- `项目 <name> UTS编译完毕。`
-- `ready in <duration>ms.`
-- For Web/H5, a Vite URL plus `UTS编译完毕`.
-
-Do not treat a final red `已停止运行...` as a compile failure by itself when `--compile true` was used and the log already contains `UTS编译完毕`. In compile-only mode, HBuilderX may stop the run session after compilation.
-
-Treat these as failures:
-
-- `[plugin:uni:app-uts] 编译失败`
-- `error:` lines with file, line, and column references
-- missing `UTS编译完毕` after a compile command exits
-- CLI process exit with an error before compilation finishes
-
-Treat warnings as follow-up work, not as a failed compile unless the user explicitly requires warning-free output. Warnings that say “This will become an error in a future release” should be turned into coding rules or scheduled cleanup.
-
-## Web/H5 Port Handling
-
-HBuilderX Web usually tries `http://localhost:5173/`, but if that port is occupied it may switch to `5174` or another free Vite port. Always report and test the URL printed by HBuilderX instead of assuming `5173`.
-
-If the in-app browser shows `Failed to connect to /127.0.0.1:8002`, first treat it as a possible HBuilderX internal debug-service disconnect. Re-run Web/H5, use the newest printed Vite URL, then inspect the route such as `/#/pages/order/order`.
-
-## Android Orientation Checks
-
-For Uni-App X Android landscape apps, do not rely on one manifest field. Source config should include both startup orientation and global page orientation:
-
-- `manifest.json`: `app.screenOrientation`, `app-android.screenOrientation`, and `app-ios.screenOrientation` as `['landscape-primary']`.
-- `pages.json`: `globalStyle.pageOrientation` as `landscape`.
-
-After Android compile, inspect the generated manifest before declaring orientation fixed:
-
-```bash
-node -e "const fs=require('fs'); const m=JSON.parse(fs.readFileSync('mms-unix/unpackage/dist/dev/app-android/manifest.json','utf8')); console.log(JSON.stringify({screenOrientation:m['app-android']?.screenOrientation, uniAppX:m['app-android']?.distribute?.['_uni-app-x_'], globalStyle:m['app-android']?.distribute?.globalStyle}, null, 2));"
-```
-
-Expected values include `screenOrientation: ['landscape-primary']`, `_uni-app-x_.pageOrientation: 'landscape'`, and `globalStyle.pageOrientation: 'landscape'`.
-
-## Useful HBuilderX Commands
-
-Open/import a project:
+打开或导入项目：
 
 ```bash
 /Applications/HBuilderX.app/Contents/MacOS/cli project open --path /absolute/path/to/project
 ```
 
-List imported projects:
+查看已导入项目：
 
 ```bash
 /Applications/HBuilderX.app/Contents/MacOS/cli project list
 ```
 
-List Android devices:
+运行 H5/Web：
+
+```bash
+/Applications/HBuilderX.app/Contents/MacOS/cli launch web --project /absolute/path/to/project --compile true --continue-on-error false --browser Built
+```
+
+查看 Android 设备：
 
 ```bash
 /Applications/HBuilderX.app/Contents/MacOS/cli devices list --platform android
 ```
 
-Run to Android device instead of compile-only:
+运行到 Android：
 
 ```bash
 /Applications/HBuilderX.app/Contents/MacOS/cli launch app-android --project /absolute/path/to/project --deviceId <device-id> --compile false --native-log true --continue-on-error false
 ```
 
-Read latest Android build/runtime logs:
+读取最近一次 Android 日志：
 
 ```bash
 /Applications/HBuilderX.app/Contents/MacOS/cli logcat app-android --project /absolute/path/to/project --mode lastBuild
 ```
 
-Capture an Android screen after a successful device run:
+截图：
 
 ```bash
 /Applications/HBuilderX.app/Contents/MacOS/cli screencap app-android --project /absolute/path/to/project --deviceId <device-id> --saveFile /absolute/path/screenshot.png --fullPage false
 ```
 
-When a run-to-device command compiles but does not print the app startup marker, do not leave the session running indefinitely. Check `devices list`, read `logcat --mode lastBuild`, and try `screencap` only after the project is confirmed running on the target device.
+## 执行流程
 
-## Uni-App X Debugging Heuristics
+1. 先确认项目类型是普通 uni-app。
+2. 读取项目脚本、`manifest.json`、`pages.json`、`package.json`，判断目标端和构建命令。
+3. 如果项目有现成测试或 lint，先跑快速本地检查。
+4. 按用户目标运行 HBuilderX H5/Web、App 或小程序目标。
+5. 编译失败时读取第一段真实错误，优先定位到文件、行列、插件名、目标平台。
+6. 修改后重跑失败目标；涉及 UI 或设备行为时补截图或日志佐证。
+7. 回报时给出实际命令、目标端、运行 URL/设备 ID、错误是否已消除、剩余风险。
 
-When HBuilderX reports App UTS/UVue errors, prefer these fixes before larger rewrites:
+## H5/Web 端口处理
 
-- Replace truthy checks on non-boolean values with explicit comparisons: `text !== ''`, `value != null`, `list.length > 0`.
-- Avoid comparing boxed or mixed numeric types with identity equality when HBuilderX warns about `Number`, `Int`, or implicit boxing.
-- Avoid destructured event-handler parameters in `.uvue` methods. Accept `event: any | null`, cast to `UTSJSONObject`, then read `event['detail']`.
-- Normalize `Any?` template prop values in helper functions before returning strings, objects, or booleans.
-- Avoid object spread and array spread in typed state updates when HBuilderX warns about incompatible generic upper bounds. Build typed arrays and typed state objects explicitly.
-- If native logs show `ClassCastException: AppConfig cannot be cast to UTSJSONObject`, fix the bridge boundary. Build and pass a real `new UTSJSONObject()` tree instead of sending a typed business config object into code that indexes it as `UTSJSONObject`.
-- Avoid runtime orientation locking through `plus as any` or `uni as any` in `App.uvue`; prefer manifest plus `pages.json.globalStyle.pageOrientation` for Uni-App X Android landscape projects.
-- Avoid `Number(value)` and `String(value)` constructors in App UTS; use `parseFloat('' + value)` and `'' + value`.
-- Avoid `unknown`, `undefined`, inline object literal types, generic object-literal methods, and TypeScript-only type predicates in `.uts` files.
-- For style objects, use `UTSJSONObject` with kebab-case CSS keys.
+HBuilderX Web 通常从 `http://localhost:5173/` 开始，但端口被占用时可能漂移到 `5174` 或其他端口。始终以 HBuilderX 输出的实际 URL 为准，不要固定假设 5173。
 
-## Final Verification Report
+如果页面打不开，按顺序检查：
 
-When reporting back, include:
+- HBuilderX 输出的 Vite URL 是否仍在监听。
+- 路由模式是否与访问路径匹配，尤其是 hash/history 差异。
+- 控制台是否有资源 404、跨域、运行时异常。
+- `manifest.json`、`pages.json` 是否能被 JSON 解析，入口页面是否存在。
 
-- HBuilderX version if shown.
-- Exact compile targets run, such as Web/H5 and Android App.
-- Whether `UTS编译完毕` appeared.
-- Any remaining warnings and whether they are compile-blocking.
-- Focused tests run and pass counts.
+## 普通 uni-app 常见排查点
+
+- `pages.json` 页面路径大小写、分包路径、tabBar 页面是否与文件一致。
+- `manifest.json` appid、平台配置、权限、横竖屏、图标与启动页配置是否完整。
+- H5 静态资源路径与 `publicPath` / `base` 是否匹配部署环境。
+- App 端原生插件、权限、Android 包名、证书、离线 SDK 版本是否匹配。
+- 小程序端条件编译、平台 API、分包大小、隐私权限声明是否符合目标平台要求。
+- Sass/Less、Babel、Vite/Webpack、uni_modules 依赖缺失时，先按包管理器恢复依赖，再重跑 HBuilderX。
+
+## 失败判断
+
+失败信号：
+
+- CLI 直接返回非 0 退出码。
+- 日志中出现明确 `error`、`Module not found`、`Cannot find module`、语法错误、平台插件编译失败。
+- H5/Web 没有输出可访问 URL，或 URL 访问后入口脚本加载失败。
+- App 真机运行没有启动成功标记，且 `logcat` 有崩溃或安装失败原因。
+
+警告不默认视为失败，但如果警告涉及即将废弃、权限、签名、隐私合规或目标平台审核，应在结果中单独列出。
+
+## 交付说明
+
+回报时包含：
+
+- HBuilderX CLI 路径与版本信息，如果日志可见。
+- 实际执行的目标端和命令。
+- H5/Web 实际 URL，或 App 设备 ID。
+- 是否编译/运行成功。
+- 关键错误摘要与修复点。
+- 已运行的测试、日志检查或截图验证。
