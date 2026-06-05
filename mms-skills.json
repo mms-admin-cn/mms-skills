@@ -1,6 +1,6 @@
 {
   "name": "mms-skills",
-  "version": "v1.11.0",
+  "version": "v1.12.5",
   "description": "Shared skill library for MMS development workflows across Cursor, Codex, and Claude Code.",
   "language": "zh-CN",
   "skillsRoot": "skills-shared",
