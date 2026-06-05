@@ -7,6 +7,21 @@ description: Use when starting any conversation - establishes how to find and us
 If you were dispatched as a subagent to execute a specific task, skip this skill.
 </SUBAGENT-STOP>
 
+<PHATIC-EXEMPTION>
+If the user's message is PURELY phatic — a greeting, status check, or simple acknowledgment with ZERO substantive content — respond directly and naturally. Do NOT invoke skills. Do NOT check for skills.
+
+Phatic (skip all skills, respond immediately):
+- "在吗", "Hi", "Hello", "你好", "Good morning"
+- "Are you there?", "Can I ask something?"
+- "OK", "Thanks", "Got it", "👍", "好的"
+
+Substantive (skills MAY apply, continue checking):
+- Any message containing a task, question, instruction, or request for action
+- "Fix this bug", "Add a login page", "What does this code do?", "帮我看下这个报错"
+
+If you're unsure whether a message is purely phatic, default to treating it as substantive.
+</PHATIC-EXEMPTION>
+
 <EXTREMELY-IMPORTANT>
 If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
 
@@ -81,6 +96,7 @@ These thoughts mean STOP—you're rationalizing:
 
 | Thought | Reality |
 |---------|---------|
+| "I should check for skills before responding to this greeting" | Pure greetings are not tasks. Phatic exemption applies. Respond directly. |
 | "This is just a simple question" | Questions are tasks. Check for skills. |
 | "I need more context first" | Skill check comes BEFORE clarifying questions. |
 | "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |

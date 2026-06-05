@@ -9,7 +9,7 @@ alwaysApply: true
 - 默认工作流技能：`/Volumes/SXPCWLKJ/MyWork/mms-skills/skills-shared/mms-dev-workflow/SKILL.md`
 
 执行顺序：
-1. 先定位目标技能目录并读取 `SKILL.md`
+1. 先定位目标技能目录并读取 `SKILL.md`（纯问候/状态确认直接回复，跳过此步）
 2. 新功能必须先分析
 3. 分析后先创建版本文档：`version/vX.Y.Z-功能说明.md`
 4. 再执行开发，并持续同步任务进度
