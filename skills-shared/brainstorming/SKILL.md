@@ -7,6 +7,21 @@ description: "You MUST use this before any creative work - creating features, bu
 
 Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
 
+## When to Use vs When NOT to Use
+
+**Use brainstorming (Level 3 only):**
+- Greenfield projects, new products, from-scratch builds
+- Major architecture changes, new subsystems
+- When the problem space is novel and requires exploration
+
+**Do NOT use brainstorming (use mms-dev-workflow instead):**
+- Existing project feature additions (Level 2) → use mms-dev-workflow
+- Bug fixes, small changes (Level 0/1) → direct implementation
+- When the project already has mms-dev-workflow set up
+
+**One task = one design process.** Never run both brainstorming AND mms-dev-workflow for the same task.
+Refer to superpowers TASK-TIERING for complexity level determination.
+
 Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design and get user approval.
 
 <HARD-GATE>

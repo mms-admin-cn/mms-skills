@@ -5,6 +5,16 @@ description: 统一研发工作流：需求分析→版本文档→开发执行�
 
 # mms 统一研发工作流
 
+## 适用层级（参照 superpowers TASK-TIERING）
+- **Level 2（中等功能）**：完整执行全部 5 阶段
+- **Level 0/1（琐碎/简单）**：跳过此技能，直接实施
+- **Level 3（复杂系统）**：改用 brainstorming → writing-plans 流水线，本技能只做复盘沉淀
+
+## 与 brainstorming 的分工
+- **新项目/新产品/从零搭建** → 使用 brainstorming（产出 `docs/superpowers/specs/`）
+- **已有项目的功能迭代** → 使用 mms-dev-workflow（产出 `version/vX.Y.Z-xxx.md`）
+- **两套不混用**：一个任务只用其中一套设计流程，不同时产出两份设计文档
+
 ## 强制规范
 1. 全程使用简体中文沟通与输出（代码/命令/日志原文除外）。
 2. 每个新功能开发前，必须先做需求分析。
