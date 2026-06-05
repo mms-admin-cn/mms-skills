@@ -123,5 +123,7 @@ Badge 组件：`<Badge type="info" text="Java 21" />`，`type` 可取 `info` | `
 |------|-----------|
 | 对齐后端/插件事实、增删文档路由、`log/index.md` | **`mms-doc-sync`** |
 | 润色结构、容器、Badge、组件版式、降低阅读负担 | **`mms-doc-authoring`**（本技能） |
+| 通用文档协作流程（迭代→审查→验证） | **[doc-coauthoring](../doc-coauthoring/SKILL.md)** |
 
 同日若既有事实更新又有大幅润色，`docs/log/index.md` 的修订说明可合并或分条，由执行者按变更量决定。
+**写作流程**参考 doc-coauthoring 的结构化协作方法，**排版细节**使用本技能。

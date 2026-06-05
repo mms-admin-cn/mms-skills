@@ -56,6 +56,8 @@ You MUST complete each phase before proceeding to the next.
    - They often contain the exact solution
    - Read stack traces completely
    - Note line numbers, file paths, error codes
+   - **英文错误消息看不懂？** → 先用 `error-translator` 翻译成中文
+   - **涉及大量日志？** → 先用 `log-analyzer` 聚合/聚类/统计
 
 2. **Reproduce Consistently**
    - Can you trigger it reliably?

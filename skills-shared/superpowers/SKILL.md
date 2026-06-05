@@ -148,7 +148,7 @@ These thoughts mean STOP—you're rationalizing:
 When multiple skills could apply, use this order — but ONLY for the tier appropriate to the task:
 
 1. **Process skills first** (brainstorming, debugging) - these determine HOW to approach the task
-2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
+2. **Implementation skills second** (ui-ux-pro-max, mcp-builder) - these guide execution
 
 **Skill selection by task type (NOT one-size-fits-all):**
 - "Fix this bug" → systematic-debugging first, then domain skills. Skip brainstorming.

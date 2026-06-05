@@ -37,7 +37,7 @@
 | Figma | `figma-use`、`figma-use-figjam`、`figma-use-slides`、`figma-code-connect`、`figma-create-new-file`、`figma-generate-design`、`figma-generate-diagram`、`figma-generate-library` |
 | Hyperframes | `hyperframes`、`hyperframes-cli`、`hyperframes-registry`、`gsap`、`website-to-hyperframes` |
 | Supabase | `supabase`、`supabase-postgres-best-practices` |
-| Superpowers 扩展 | `brainstorming`、`dispatching-parallel-agents`、`finishing-a-development-branch`、`subagent-driven-development`、`using-git-worktrees`、`verification-before-completion`、`writing-skills` |
+| Superpowers 扩展 | `brainstorming`、`dispatching-parallel-agents`、`finishing-a-development-branch`、`subagent-driven-development`、`using-git-worktrees`、`verification-before-completion`、`writing-skills`（⚠️ 已弃用，使用 `skill-creator`） |
 | 文档运行时 | `documents`、`presentations`、`spreadsheets` |
 
 ## 常用技能索引

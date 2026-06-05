@@ -1,6 +1,6 @@
 ---
 name: uniapp-vue3-workflow
-description: uni-app Vue3 全流程开发编排技能。用户提出普通 uni-app、Vue3、uv-ui、HBuilderX、H5/App/小程序、脚手架、环境变量、自动化测试、打包、发布、服务器部署等需求时必须优先使用；从一句需求主动推进分析、设计、开发、验证、测试、打包和部署，减少反复询问命令。默认结合 hbuilderx-automation、env-manager、api-tester、frontend-design、mms-ssh-connect、mms-desktop 等技能。
+description: uni-app Vue3 全流程开发编排技能。用户提出普通 uni-app、Vue3、uv-ui、HBuilderX、H5/App/小程序、脚手架、环境变量、自动化测试、打包、发布、服务器部署等需求时必须优先使用；从一句需求主动推进分析、设计、开发、验证、测试、打包和部署，减少反复询问命令。默认结合 hbuilderx-automation、env-manager、api-tester、ui-ux-pro-max、mms-ssh-connect、mms-desktop 等技能。
 ---
 
 # uni-app Vue3 全流程工作流
@@ -27,7 +27,7 @@ description: uni-app Vue3 全流程开发编排技能。用户提出普通 uni-a
 | HBuilderX 运行/打包/日志 | `hbuilderx-automation` | 导入项目、运行 H5/App/小程序、看日志和截图 |
 | 环境变量与配置 | `env-manager` | 生成 `.env.example`、检查缺失变量、避免密钥入库 |
 | API 测试 | `api-tester` | 根据接口契约生成集成测试、mock 或 curl 验证 |
-| UI 设计与视觉验证 | `frontend-design` | 页面、组件、交互、响应式与视觉 QA |
+| UI 设计与视觉验证 | `ui-ux-pro-max` | 页面、组件、交互、响应式与视觉 QA |
 | 服务器部署 | `mms-ssh-connect` | 读取 `.mms/config/ssh-info.yml` 或旧配置，走 SSH/rsync/docker |
 | 桌面包 | `mms-desktop` | H5/Vue `dist` 接 Tauri 桌面壳 |
 

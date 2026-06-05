@@ -803,3 +803,13 @@ import { PluginTableTool } from '@mms-ui/plugin-common-kit';
 ## 与 mms-kills 的关系
 
 通用 **CRUD、权限、分页、mms-ui** 仍以 **`.cursor/skills/mms-kills/SKILL.md`** 为准；**仅插件隔离、SPI、宿主行为**以本技能为准。
+
+## 关联技能（同一插件体系，分工明确）
+
+| 场景 | 使用技能 | 说明 |
+|------|---------|------|
+| 插件开发与封装 | **mms-plugin**（本技能） | 命名、目录、POM、plugin.json、SPI、联邦前端 |
+| 插件安装前检查/排障 | **[mms-plugin-check](../mms-plugin-check/SKILL.md)** | schema.sql、菜单路由、SPI_ONLY、联邦 remoteEntry |
+| 插件质量与演进路线 | **[mms-plugin-jar-phases](../mms-plugin-jar-phases/SKILL.md)** | 缺陷排查、性能基线、能力矩阵 |
+
+三个技能互补，不重复。开发按 mms-plugin，检查按 mms-plugin-check，质量规划按 mms-plugin-jar-phases。
