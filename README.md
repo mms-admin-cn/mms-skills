@@ -1,6 +1,6 @@
 # mms-skills
 
-![version](https://img.shields.io/badge/version-v1.12.5-blue)
+![version](https://img.shields.io/badge/version-v1.12.6-blue)
 ![language](https://img.shields.io/badge/language-zh--CN-green)
 ![skills](https://img.shields.io/badge/skills-83-orange)
 
@@ -56,7 +56,8 @@ mms-skills/
 ├── install.sh              ← 一键安装脚本
 ├── AGENTS.md               ← Codex 引导文件
 ├── CLAUDE.md               ← Claude Code 引导文件
-├── .cursorrules            ← Cursor 引导文件
+├── .cursorrules            ← Cursor 旧版引导文件
+├── .cursor/rules/          ← Cursor 新版规则目录
 ├── skills-shared/          ← 83 个技能（唯一来源）
 │   └── <skill>/SKILL.md
 └── version/                ← 版本文档

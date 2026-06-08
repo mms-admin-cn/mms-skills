@@ -1,0 +1,33 @@
+---
+description: 项目总入口规则（共享技能库路由 + 轻量任务分级）
+alwaysApply: true
+---
+
+你在本项目工作时，优先遵守当前用户要求；共享技能库只在任务复杂度需要时加载。
+
+- 共享目录：`/Volumes/SXPCWLKJ/MyWork/mms-skills/skills-shared`
+- 默认工作流技能：`/Volumes/SXPCWLKJ/MyWork/mms-skills/skills-shared/mms-dev-workflow/SKILL.md`
+
+## 默认原则
+
+默认不加载技能。先判断任务层级：
+
+1. **Level 0：纯问候 / 琐碎请求**
+   `在吗`、`你好`、`谢谢`、改颜色、修拼写、改一行配置等，直接回复或直接修改，不读取技能，不创建版本文档。
+2. **Level 1：简单明确任务**
+   单一 bug、小字段、小样式、小组件，快速分析后实施；必要时只读一个相关技能。
+3. **Level 2：中等功能 / 多文件变更**
+   读取 `mms-dev-workflow/SKILL.md`，按分析、版本文档、开发、验证、复盘执行。
+4. **Level 3：复杂系统 / 从零构建**
+   读取 `brainstorming/SKILL.md`，再按需进入 `writing-plans` 或执行流程。
+
+## 选择规则
+
+- 一个任务只用一个主流程技能：已有项目功能迭代用 `mms-dev-workflow`，从零设计用 `brainstorming`。
+- 用户说“快速改”“直接改”“just do it”“不用走流程”时，立即跳过流程技能。
+- 领域任务按需读取对应技能，如 `uniapp-vue3-workflow`、`hbuilderx-automation`、`mms-ssh-connect`、`mms-plugin`、`mms-db-connect`。
+
+## 输出要求
+
+- 全部中文回答（代码、命令、日志原文除外）。
+- 涉及服务器写操作、生产发布、数据库写入、删除文件、真实密钥等外部状态变更时，先说明影响并等待明确确认。

@@ -76,24 +76,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# --- 全局安装：覆盖目标目录 ---
-if [ "$GLOBAL_INSTALL" = true ]; then
-  echo "→ 全局安装模式"
-  if [ "$INSTALL_CODEX" = true ]; then
-    warn "Codex 不支持全局安装，已跳过"
-    INSTALL_CODEX=false
-  fi
-  if [ "$INSTALL_CURSOR" = true ]; then
-    TARGET="$HOME/.cursor"
-    ok "Cursor 全局规则目录: $TARGET/rules/"
-  fi
-  if [ "$INSTALL_CLAUDE" = true ]; then
-    CLAUDE_TARGET="$HOME/.claude"
-    ok "Claude Code 全局规则目录: $CLAUDE_TARGET/"
-  fi
-  echo ""
-fi
-
 # --- 前置检查 ---
 if [ ! -d "$SKILLS_HOME/skills-shared" ]; then
   fail "未找到 skills-shared 目录，请确认在 mms-skills 仓库根目录运行此脚本"
@@ -106,8 +88,33 @@ if [ "$INSTALL_ALL" = true ]; then
   INSTALL_CLAUDE=true
 fi
 
-if [ ! -d "$TARGET" ]; then
-  fail "目标目录不存在: $TARGET"
+CURSOR_TARGET="$TARGET/.cursor"
+CLAUDE_TARGET="$TARGET"
+
+# --- 全局安装：覆盖目标目录 ---
+if [ "$GLOBAL_INSTALL" = true ]; then
+  echo "→ 全局安装模式"
+
+  if [ "$INSTALL_CODEX" = true ]; then
+    warn "Codex 不支持全局安装，已跳过"
+    INSTALL_CODEX=false
+  fi
+
+  CURSOR_TARGET="$HOME/.cursor"
+  CLAUDE_TARGET="$HOME/.claude"
+
+  [ "$INSTALL_CURSOR" = true ] && ok "Cursor 全局规则目录: $CURSOR_TARGET/rules/"
+  [ "$INSTALL_CLAUDE" = true ] && ok "Claude Code 全局规则目录: $CLAUDE_TARGET/"
+  echo ""
+else
+  if [ ! -d "$TARGET" ]; then
+    fail "目标目录不存在: $TARGET"
+    exit 1
+  fi
+fi
+
+if [ "$INSTALL_CODEX" = false ] && [ "$INSTALL_CURSOR" = false ] && [ "$INSTALL_CLAUDE" = false ]; then
+  fail "没有可安装的平台，请检查参数"
   exit 1
 fi
 
@@ -118,6 +125,7 @@ if [ "$ADD_SHELL" = true ]; then
     RC_FILE="$HOME/.bashrc"
   fi
   LINE="export MMS_SKILLS_HOME=\"$SKILLS_HOME\""
+  mkdir -p "$(dirname "$RC_FILE")"
   if grep -q "MMS_SKILLS_HOME" "$RC_FILE" 2>/dev/null; then
     warn "$RC_FILE 中已有 MMS_SKILLS_HOME，跳过写入"
   else
@@ -131,13 +139,23 @@ fi
 # --- 安装函数 ---
 install_file() {
   local src="$SKILLS_HOME/$1"
-  local dst="$TARGET/$2"
+  local dst="$2"
   local label="$3"
 
   if [ ! -f "$src" ]; then
     fail "$label: 源文件不存在 $src"
     return 1
   fi
+
+  if [ ! -s "$src" ]; then
+    fail "$label: 源文件为空 $src"
+    return 1
+  fi
+
+  case "$dst" in
+    /*) ;;
+    *) dst="$TARGET/$dst" ;;
+  esac
 
   mkdir -p "$(dirname "$dst")"
 
@@ -147,7 +165,12 @@ install_file() {
     -e "s|/Volumes/SXPCWLKJ/MyWork/mms-skills|$SKILLS_HOME|g" \
     "$src" > "$dst"
 
-  ok "$label → $2"
+  if [ ! -s "$dst" ]; then
+    fail "$label: 安装结果为空 $dst"
+    return 1
+  fi
+
+  ok "$label → $dst"
 }
 
 # --- 执行安装 ---
@@ -155,7 +178,11 @@ echo ""
 echo "════════════════════════════════════════"
 echo "  mms-skills $(head -1 "$SKILLS_HOME/PROJECT_VERSION" 2>/dev/null || echo '?') 安装"
 echo "  来源: $SKILLS_HOME"
-echo "  目标: $TARGET"
+if [ "$GLOBAL_INSTALL" = true ]; then
+  echo "  目标: 全局安装"
+else
+  echo "  目标: $TARGET"
+fi
 echo "════════════════════════════════════════"
 echo ""
 
@@ -167,13 +194,16 @@ if [ "$INSTALL_CODEX" = true ]; then
 fi
 
 if [ "$INSTALL_CURSOR" = true ]; then
-  install_file ".cursor/rules/00-project-bootstrap.mdc" ".cursor/rules/00-project-bootstrap.mdc" "Cursor"
+  if [ "$GLOBAL_INSTALL" = true ]; then
+    install_file ".cursor/rules/00-project-bootstrap.mdc" "$CURSOR_TARGET/rules/00-project-bootstrap.mdc" "Cursor（全局）"
+  else
+    install_file ".cursor/rules/00-project-bootstrap.mdc" ".cursor/rules/00-project-bootstrap.mdc" "Cursor"
+  fi
   INSTALLED=$((INSTALLED + 1))
 fi
 
 if [ "$INSTALL_CLAUDE" = true ]; then
   if [ "$GLOBAL_INSTALL" = true ]; then
-    mkdir -p "$CLAUDE_TARGET"
     install_file "CLAUDE.md" "$CLAUDE_TARGET/CLAUDE.md" "Claude Code（全局）"
   else
     install_file "CLAUDE.md" "CLAUDE.md" "Claude Code"
@@ -187,18 +217,24 @@ ok "安装完成 — 已处理 $INSTALLED 个平台"
 if [ "$ADD_SHELL" = true ]; then
   echo ""
   warn "请执行以下命令使环境变量生效:"
-  echo "  source ~/.zshrc"
+  echo "  source $RC_FILE"
 fi
 
 echo ""
 echo "验证方式:"
-[ "$INSTALL_CODEX" = true ]  && echo "  ls -la $TARGET/AGENTS.md"
-[ "$INSTALL_CURSOR" = true ] && echo "  ls -la $TARGET/.cursorrules"
+[ "$INSTALL_CODEX" = true ]  && echo "  test -s $TARGET/AGENTS.md"
+if [ "$INSTALL_CURSOR" = true ]; then
+  if [ "$GLOBAL_INSTALL" = true ]; then
+    echo "  test -s $CURSOR_TARGET/rules/00-project-bootstrap.mdc"
+  else
+    echo "  test -s $TARGET/.cursor/rules/00-project-bootstrap.mdc"
+  fi
+fi
 if [ "$INSTALL_CLAUDE" = true ]; then
   if [ "$GLOBAL_INSTALL" = true ]; then
-    echo "  ls -la ~/.claude/CLAUDE.md"
+    echo "  test -s $CLAUDE_TARGET/CLAUDE.md"
   else
-    echo "  ls -la $TARGET/CLAUDE.md"
+    echo "  test -s $TARGET/CLAUDE.md"
   fi
 fi
 echo ""
